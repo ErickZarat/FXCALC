@@ -30,17 +30,24 @@ public class FXMLDocumentController implements Initializable {
     private void onButtonPressed(ActionEvent event) {
 
         Button btn = (Button) event.getSource();
-
         String texto = btn.getText();
         String textoEnResultado = txtResultado.getText();
         String resultado = "";
 
-        if (textoEnResultado.equals("0") || operacion.equals(Operacion.NINGUNA)) {
+        if(operacion.equals(Operacion.NINGUNA)){
+            resultado = texto;
+        }
+        else if (textoEnResultado.equals("0")) {
             resultado = texto;
         } else {
             resultado = textoEnResultado + texto;
         }
         txtResultado.setText(resultado);
+    }
+
+    @FXML
+    private void onBackSpacePressed(ActionEvent event) {
+
     }
 
     @FXML
@@ -58,6 +65,18 @@ public class FXMLDocumentController implements Initializable {
                 total += numero;
                 operacion = Operacion.SUMA;
                 break;
+            case "btnResta":
+                total = numero;
+                operacion = Operacion.RESTA;
+                break;
+            case "btnMultiplicacion":
+                total = numero;
+                operacion = Operacion.MULTIPLICACION;
+                break;
+            case "btnDivision":
+                total = numero;
+                operacion = Operacion.DIVISION;
+                break;
         }
 
         System.out.println(total);
@@ -72,6 +91,13 @@ public class FXMLDocumentController implements Initializable {
                 total += numero;
                 break;
             case RESTA:
+                total -=numero;
+                break;
+            case MULTIPLICACION:
+                total *= numero;
+                break;
+            case DIVISION:
+                total /= numero;
                 break;
         }
 
