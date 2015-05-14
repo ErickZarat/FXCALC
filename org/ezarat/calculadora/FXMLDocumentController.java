@@ -14,17 +14,24 @@ import javafx.scene.control.TextField;
  */
 public class FXMLDocumentController implements Initializable {
 
-    private double numero, total;
+    private double numero, total, numX, numY;
 
     private enum Operacion {
 
-        NINGUNA, DIVISION, SUMA, RESTA, MULTIPLICACION
+        NINGUNA, DIVISION, SUMA, RESTA, MULTIPLICACION, EXPONENTE, RAIZ, NEG_POS, IGUAL
     }
-
+    private String resultado = new String();
     private Operacion operacion;
 
     @FXML
     private TextField txtResultado;
+
+    @FXML
+    private void onClearPressed(ActionEvent event) {
+        txtResultado.setText("");
+        operacion = Operacion.NINGUNA;
+
+    }
 
     @FXML
     private void onButtonPressed(ActionEvent event) {
@@ -34,10 +41,14 @@ public class FXMLDocumentController implements Initializable {
         String textoEnResultado = txtResultado.getText();
         String resultado = "";
 
-        if(operacion.equals(Operacion.NINGUNA)){
-            resultado = texto;
+        if (operacion.equals(Operacion.IGUAL)) {
+            operacion = Operacion.NINGUNA;
+            total = 0.0;
+            txtResultado.setText("0");
+            textoEnResultado = "0";
         }
-        else if (textoEnResultado.equals("0")) {
+
+        if (textoEnResultado.equals("0")) {
             resultado = texto;
         } else {
             resultado = textoEnResultado + texto;
@@ -47,7 +58,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void onBackSpacePressed(ActionEvent event) {
-
+        if (txtResultado.getText().length() != 0) {
+            txtResultado.setText(txtResultado.getText().substring(0, txtResultado.getText().length() - 1));
+        }
     }
 
     @FXML
@@ -55,7 +68,7 @@ public class FXMLDocumentController implements Initializable {
 
         numero = Double.parseDouble(txtResultado.getText());
         System.out.println(numero);
-        txtResultado.setText("0");
+        txtResultado.setText("");
 
         Button btn = (Button) event.getSource();
         String btnId = btn.getId();
@@ -66,7 +79,7 @@ public class FXMLDocumentController implements Initializable {
                 operacion = Operacion.SUMA;
                 break;
             case "btnResta":
-                total = numero;
+                total = (total * -1) - numero;
                 operacion = Operacion.RESTA;
                 break;
             case "btnMultiplicacion":
@@ -77,6 +90,34 @@ public class FXMLDocumentController implements Initializable {
                 total = numero;
                 operacion = Operacion.DIVISION;
                 break;
+            case "btnExponenteCuadrado":
+                total = Math.pow(numero, 2);
+                txtResultado.setText("" + total);
+                operacion = Operacion.IGUAL;
+                break;
+            case "btnExponente":
+                total = numero;
+                operacion = Operacion.EXPONENTE;
+                break;
+            case "btnRaizCuadrada":
+                total = Math.sqrt(numero);
+                txtResultado.setText("" + total);
+                operacion = Operacion.IGUAL;
+                break;
+            case "btnRaiz":
+                total = numero;
+                operacion = Operacion.RAIZ;
+                break;
+            case "btnLog10":
+                total = Math.log10(numero);
+                txtResultado.setText("" + total);
+                operacion = Operacion.IGUAL;
+                break;
+            case "btnNegPos":
+                numero *= -1;
+                txtResultado.setText("" + numero);
+                break;
+            //  enum equls  == enum Equals / resetear calculadora
         }
 
         System.out.println(total);
@@ -85,13 +126,12 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onEqualsPressed(ActionEvent event) {
         numero = Double.parseDouble(txtResultado.getText());
-
         switch (operacion) {
             case SUMA:
                 total += numero;
                 break;
             case RESTA:
-                total -=numero;
+                total -= numero;
                 break;
             case MULTIPLICACION:
                 total *= numero;
@@ -99,16 +139,28 @@ public class FXMLDocumentController implements Initializable {
             case DIVISION:
                 total /= numero;
                 break;
+            case EXPONENTE:
+                total = Math.pow(total, numero);
+                break;
+            case RAIZ:
+                total = Math.pow(total, 1.0 / numero);
+                break;
         }
-
+        operacion = Operacion.IGUAL;
         txtResultado.setText(String.valueOf(total));
         total = 0.0;
-        operacion = Operacion.NINGUNA;
+
     }
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-
+    private void onPuntoPressed(ActionEvent event) {
+        Button btn = (Button) event.getSource();
+        if (txtResultado.getText().contains(".") == true) {
+            resultado = txtResultado.getText();
+        } else {
+            resultado = txtResultado.getText() + btn.getText();
+        }
+        txtResultado.setText(resultado);
     }
 
     @Override
@@ -116,6 +168,8 @@ public class FXMLDocumentController implements Initializable {
         txtResultado.setText("0");
         total = 0.0;
         numero = 0.0;
+        numX = 0.0;
+        numY = 0.0;
         operacion = Operacion.NINGUNA;
     }
 
