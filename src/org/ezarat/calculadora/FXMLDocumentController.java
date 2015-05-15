@@ -94,7 +94,7 @@ public class FXMLDocumentController implements Initializable {
                 lblOperacion.setText((textoEnLabel = "" + total + " + " + resultado));
                 break;
             case "btnResta":
-                total = (total * -1) - numero;
+                total = total - (numero * -1);
                 operacion = Operacion.RESTA;
                 break;
             case "btnMultiplicacion":
