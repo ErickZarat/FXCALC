@@ -184,17 +184,15 @@ public class FXMLDocumentController implements Initializable {
                 total = Math.pow(total, 1.0 / numero);
                 break;
             case NINGUNA:
-                txtResultado.setText(resultado);
+                total = numero;
                 break;
         }
-        if (!operacion.equals(Operacion.ERROR)) {
+        if (!operacion.equals(Operacion.ERROR) || operacion.equals(Operacion.NINGUNA)) {
             txtResultado.setText(String.valueOf(total));
-
             operacion = Operacion.IGUAL;
-
-            total = 0.0;
-
         }
+        total = 0.0;
+        operacion = Operacion.IGUAL;
     }
 
     @FXML
