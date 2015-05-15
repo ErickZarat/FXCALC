@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -18,10 +19,13 @@ public class FXMLDocumentController implements Initializable {
 
     private enum Operacion {
 
-        NINGUNA, DIVISION, SUMA, RESTA, MULTIPLICACION, EXPONENTE, RAIZ, NEG_POS, IGUAL
+        NINGUNA, DIVISION, SUMA, RESTA, MULTIPLICACION, EXPONENTE, RAIZ, NEG_POS, IGUAL, ERROR
     }
-    private String resultado = new String();
+    private String resultado = new String(), textoEnLabel = new String();
     private Operacion operacion;
+
+    @FXML
+    private Label lblOperacion;
 
     @FXML
     private TextField txtResultado;
@@ -29,8 +33,17 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onClearPressed(ActionEvent event) {
         txtResultado.setText("");
+        lblOperacion.setText("");
         operacion = Operacion.NINGUNA;
+    }
 
+    private void MathError(Double numeroX, int numeroId) throws MathErrorException {
+        if (numeroX <= 0.0 && numeroId == 1) {
+            throw new MathErrorException("HA OCURRIDO UN ERROR MATEMATICO");
+        }
+        if (numeroX == 0 && numeroId == 2) {
+            throw new MathErrorException("HA OCURRIDO UN ERROR MATEMATICO");
+        }
     }
 
     @FXML
@@ -53,6 +66,7 @@ public class FXMLDocumentController implements Initializable {
         } else {
             resultado = textoEnResultado + texto;
         }
+
         txtResultado.setText(resultado);
     }
 
@@ -68,7 +82,7 @@ public class FXMLDocumentController implements Initializable {
 
         numero = Double.parseDouble(txtResultado.getText());
         System.out.println(numero);
-        txtResultado.setText("");
+        txtResultado.setText("0");
 
         Button btn = (Button) event.getSource();
         String btnId = btn.getId();
@@ -77,6 +91,7 @@ public class FXMLDocumentController implements Initializable {
             case "btnSuma":
                 total += numero;
                 operacion = Operacion.SUMA;
+                lblOperacion.setText((textoEnLabel = "" + total + " + " + resultado));
                 break;
             case "btnResta":
                 total = (total * -1) - numero;
@@ -100,22 +115,37 @@ public class FXMLDocumentController implements Initializable {
                 operacion = Operacion.EXPONENTE;
                 break;
             case "btnRaizCuadrada":
-                total = Math.sqrt(numero);
-                txtResultado.setText("" + total);
-                operacion = Operacion.IGUAL;
+                try {
+                    MathError(numero, 1);
+                    total = Math.sqrt(numero);
+                    txtResultado.setText("" + total);
+                    operacion = Operacion.IGUAL;
+                } catch (MathErrorException m) {
+                    txtResultado.setText("Math Error");
+                }
                 break;
             case "btnRaiz":
-                total = numero;
-                operacion = Operacion.RAIZ;
+                try {
+                    MathError(numero, 1);
+                    total = numero;
+                    operacion = Operacion.RAIZ;
+                } catch (MathErrorException e) {
+                    txtResultado.setText("Math Error");
+                }
                 break;
             case "btnLog10":
-                total = Math.log10(numero);
-                txtResultado.setText("" + total);
-                operacion = Operacion.IGUAL;
+                try {
+                    MathError(numero, 1);
+                    total = Math.log10(numero);
+                    txtResultado.setText("" + total);
+                    operacion = Operacion.IGUAL;
+                } catch (MathErrorException k) {
+                    txtResultado.setText("Math Error");
+                }
                 break;
             case "btnNegPos":
                 numero *= -1;
-                txtResultado.setText("" + numero);
+                txtResultado.setText(String.valueOf(numero));
                 break;
             //  enum equls  == enum Equals / resetear calculadora
         }
@@ -129,6 +159,7 @@ public class FXMLDocumentController implements Initializable {
         switch (operacion) {
             case SUMA:
                 total += numero;
+                lblOperacion.setText(textoEnLabel + numero);
                 break;
             case RESTA:
                 total -= numero;
@@ -137,7 +168,14 @@ public class FXMLDocumentController implements Initializable {
                 total *= numero;
                 break;
             case DIVISION:
-                total /= numero;
+                try {
+                    MathError(numero, 2);
+                    System.out.println(numero);
+                    total /= numero;
+                } catch (MathErrorException j) {
+                    txtResultado.setText("Math Error");
+                    operacion = Operacion.ERROR;
+                }
                 break;
             case EXPONENTE:
                 total = Math.pow(total, numero);
@@ -145,15 +183,23 @@ public class FXMLDocumentController implements Initializable {
             case RAIZ:
                 total = Math.pow(total, 1.0 / numero);
                 break;
+            case NINGUNA:
+                txtResultado.setText(resultado);
+                break;
         }
-        operacion = Operacion.IGUAL;
-        txtResultado.setText(String.valueOf(total));
-        total = 0.0;
+        if (!operacion.equals(Operacion.ERROR)) {
+            txtResultado.setText(String.valueOf(total));
 
+            operacion = Operacion.IGUAL;
+
+            total = 0.0;
+
+        }
     }
 
     @FXML
-    private void onPuntoPressed(ActionEvent event) {
+    private void onPuntoPressed(ActionEvent event
+    ) {
         Button btn = (Button) event.getSource();
         if (txtResultado.getText().contains(".") == true) {
             resultado = txtResultado.getText();
@@ -164,7 +210,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb
+    ) {
         txtResultado.setText("0");
         total = 0.0;
         numero = 0.0;

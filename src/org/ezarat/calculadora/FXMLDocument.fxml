@@ -163,7 +163,7 @@
             <ColorAdjust brightness="-0.37" contrast="-0.07" />
          </effect>
       </Button>
-      <Label fx:id="lblOperacion" layoutX="19.0" layoutY="14.0" prefHeight="17.0" prefWidth="206.0" />
+      <Label fx:id="lblOperacion" layoutX="26.0" layoutY="14.0" prefHeight="17.0" prefWidth="193.0" />
     </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />
