@@ -39,9 +39,11 @@ public class FXMLDocumentController implements Initializable {
 
     private void MathError(Double numeroX, int numeroId) throws MathErrorException {
         if (numeroX <= 0.0 && numeroId == 1) {
+            lblOperacion.setText("");
             throw new MathErrorException("HA OCURRIDO UN ERROR MATEMATICO");
         }
         if (numeroX == 0 && numeroId == 2) {
+            lblOperacion.setText("");
             throw new MathErrorException("HA OCURRIDO UN ERROR MATEMATICO");
         }
     }
@@ -55,6 +57,7 @@ public class FXMLDocumentController implements Initializable {
         String resultado = "";
 
         if (operacion.equals(Operacion.IGUAL)) {
+            lblOperacion.setText("");
             operacion = Operacion.NINGUNA;
             total = 0.0;
             txtResultado.setText("0");
@@ -122,6 +125,7 @@ public class FXMLDocumentController implements Initializable {
                     operacion = Operacion.IGUAL;
                 } catch (MathErrorException m) {
                     txtResultado.setText("Math Error");
+                    operacion = Operacion.IGUAL;
                 }
                 break;
             case "btnRaiz":
@@ -129,8 +133,10 @@ public class FXMLDocumentController implements Initializable {
                     MathError(numero, 1);
                     total = numero;
                     operacion = Operacion.RAIZ;
+                    lblOperacion.setText(total + " ^√");
                 } catch (MathErrorException e) {
                     txtResultado.setText("Math Error");
+                    operacion = Operacion.IGUAL;
                 }
                 break;
             case "btnLog10":
@@ -139,8 +145,10 @@ public class FXMLDocumentController implements Initializable {
                     total = Math.log10(numero);
                     txtResultado.setText("" + total);
                     operacion = Operacion.IGUAL;
+                    lblOperacion.setText("log10( " + numero + " )");
                 } catch (MathErrorException k) {
                     txtResultado.setText("Math Error");
+                    operacion = Operacion.IGUAL;
                 }
                 break;
             case "btnNegPos":
@@ -181,7 +189,8 @@ public class FXMLDocumentController implements Initializable {
                 total = Math.pow(total, numero);
                 break;
             case RAIZ:
-                total = Math.pow(total, 1.0 / numero);
+                lblOperacion.setText(lblOperacion.getText() + " " + numero);
+                total = Math.pow(numero, 1.0 / total);
                 break;
             case NINGUNA:
                 total = numero;

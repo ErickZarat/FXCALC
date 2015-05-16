@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
@@ -95,21 +96,13 @@
             <ColorAdjust brightness="-0.37" contrast="-0.07" />
          </effect>
       </Button>
-      <TextField fx:id="txtResultado" alignment="BASELINE_RIGHT" editable="false" layoutX="19.0" layoutY="14.0" prefHeight="47.0" prefWidth="206.0">
+      <TextField fx:id="txtResultado" alignment="BASELINE_RIGHT" editable="false" layoutX="19.0" layoutY="14.0" opacity="0.65" prefHeight="47.0" prefWidth="206.0">
          <font>
             <Font size="18.0" />
          </font>
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></TextField>
-      <Button fx:id="btnIgual" contentDisplay="CENTER" layoutX="190.0" layoutY="193.0" maxHeight="77.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" mnemonicParsing="false" onAction="#onEqualsPressed" prefHeight="77.0" prefWidth="35.0" text="=" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="193.0">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-         <effect>
-            <ColorAdjust brightness="-0.37" contrast="-0.07" />
-         </effect>
-      </Button>
       <Button fx:id="btnExponente" layoutX="190.0" layoutY="109.0" maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" mnemonicParsing="false" onAction="#onOperationPressed" prefHeight="35.0" prefWidth="35.0" text="xˆ">
          <font>
             <Font name="System Bold" size="13.0" />
@@ -163,11 +156,17 @@
             <ColorAdjust brightness="-0.37" contrast="-0.07" />
          </effect>
       </Button>
-      <Label fx:id="lblOperacion" layoutX="26.0" layoutY="14.0" prefHeight="17.0" prefWidth="193.0" />
+      <Label fx:id="lblOperacion" layoutX="26.0" layoutY="14.0" opacity="0.65" prefHeight="17.0" prefWidth="193.0" />
+      <Button fx:id="btnIgual" layoutX="190.0" layoutY="193.0" maxHeight="77.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" mnemonicParsing="false" onAction="#onEqualsPressed" prefHeight="77.0" prefWidth="35.0" text="=">
+         <effect>
+            <ColorAdjust brightness="-0.37" contrast="-0.07" />
+         </effect>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
     </children>
-   <cursor>
-      <Cursor fx:constant="DEFAULT" />
-   </cursor>
+   
    <effect>
       <DisplacementMap>
          <mapData>
