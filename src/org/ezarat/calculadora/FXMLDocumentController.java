@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
  */
 public class FXMLDocumentController implements Initializable {
 
-    private double numero, total, numX, numY;
+    private double numero, total;
 
     private enum Operacion {
 
@@ -97,16 +97,20 @@ public class FXMLDocumentController implements Initializable {
                 lblOperacion.setText((textoEnLabel = "" + total + " + " + resultado));
                 break;
             case "btnResta":
-                total = total - (numero * -1);
+                total -= (numero * -1);
                 operacion = Operacion.RESTA;
+                lblOperacion.setText((textoEnLabel = "" + total + " - " + resultado));
                 break;
             case "btnMultiplicacion":
                 total = numero;
+                total *= numero;
                 operacion = Operacion.MULTIPLICACION;
+                lblOperacion.setText((textoEnLabel = "" + total + " * " + resultado));
                 break;
             case "btnDivision":
                 total = numero;
                 operacion = Operacion.DIVISION;
+                lblOperacion.setText((textoEnLabel = "" + total + " / "));
                 break;
             case "btnExponenteCuadrado":
                 total = Math.pow(numero, 2);
@@ -123,6 +127,7 @@ public class FXMLDocumentController implements Initializable {
                     total = Math.sqrt(numero);
                     txtResultado.setText("" + total);
                     operacion = Operacion.IGUAL;
+                    
                 } catch (MathErrorException m) {
                     txtResultado.setText("Math Error");
                     operacion = Operacion.IGUAL;
@@ -171,12 +176,15 @@ public class FXMLDocumentController implements Initializable {
                 break;
             case RESTA:
                 total -= numero;
+                lblOperacion.setText(textoEnLabel + numero);
                 break;
             case MULTIPLICACION:
                 total *= numero;
+                lblOperacion.setText(textoEnLabel + numero);
                 break;
             case DIVISION:
                 try {
+                    lblOperacion.setText((textoEnLabel = "" + total + " / " + numero));
                     MathError(numero, 2);
                     System.out.println(numero);
                     total /= numero;
@@ -189,8 +197,15 @@ public class FXMLDocumentController implements Initializable {
                 total = Math.pow(total, numero);
                 break;
             case RAIZ:
-                lblOperacion.setText(lblOperacion.getText() + " " + numero);
-                total = Math.pow(numero, 1.0 / total);
+                try {
+                    MathError(numero, 1);
+                    lblOperacion.setText(lblOperacion.getText() + " " + numero);
+                    total = Math.pow(numero, 1.0 / total);
+                } catch (MathErrorException g) {
+                    txtResultado.setText("Math Error");
+                    operacion = Operacion.ERROR;
+                }
+                
                 break;
             case NINGUNA:
                 total = numero;
@@ -222,8 +237,6 @@ public class FXMLDocumentController implements Initializable {
         txtResultado.setText("0");
         total = 0.0;
         numero = 0.0;
-        numX = 0.0;
-        numY = 0.0;
         operacion = Operacion.NINGUNA;
     }
 
