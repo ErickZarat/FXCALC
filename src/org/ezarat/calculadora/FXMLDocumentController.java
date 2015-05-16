@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
  */
 public class FXMLDocumentController implements Initializable {
 
-    private double numero, total;
+    private double numero, total, acumulado;
 
     private enum Operacion {
 
@@ -34,6 +34,8 @@ public class FXMLDocumentController implements Initializable {
     private void onClearPressed(ActionEvent event) {
         txtResultado.setText("");
         lblOperacion.setText("");
+        total = 0.0;
+        numero = 0.0;
         operacion = Operacion.NINGUNA;
     }
 
@@ -103,7 +105,6 @@ public class FXMLDocumentController implements Initializable {
                 break;
             case "btnMultiplicacion":
                 total = numero;
-                total *= numero;
                 operacion = Operacion.MULTIPLICACION;
                 lblOperacion.setText((textoEnLabel = "" + total + " * " + resultado));
                 break;
@@ -120,6 +121,7 @@ public class FXMLDocumentController implements Initializable {
             case "btnExponente":
                 total = numero;
                 operacion = Operacion.EXPONENTE;
+                lblOperacion.setText(total + " ^ ");
                 break;
             case "btnRaizCuadrada":
                 try {
@@ -127,7 +129,7 @@ public class FXMLDocumentController implements Initializable {
                     total = Math.sqrt(numero);
                     txtResultado.setText("" + total);
                     operacion = Operacion.IGUAL;
-                    
+
                 } catch (MathErrorException m) {
                     txtResultado.setText("Math Error");
                     operacion = Operacion.IGUAL;
@@ -179,6 +181,7 @@ public class FXMLDocumentController implements Initializable {
                 lblOperacion.setText(textoEnLabel + numero);
                 break;
             case MULTIPLICACION:
+
                 total *= numero;
                 lblOperacion.setText(textoEnLabel + numero);
                 break;
@@ -194,6 +197,7 @@ public class FXMLDocumentController implements Initializable {
                 }
                 break;
             case EXPONENTE:
+                lblOperacion.setText(total + " ^ " + numero);
                 total = Math.pow(total, numero);
                 break;
             case RAIZ:
@@ -205,7 +209,7 @@ public class FXMLDocumentController implements Initializable {
                     txtResultado.setText("Math Error");
                     operacion = Operacion.ERROR;
                 }
-                
+
                 break;
             case NINGUNA:
                 total = numero;
